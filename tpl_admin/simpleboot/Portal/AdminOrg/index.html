@@ -1,0 +1,98 @@
+<admintpl file="header" />
+<body class="J_scroll_fixed">
+<div class="wrap J_check_wrap">
+  <ul class="nav nav-tabs">
+     <li class="active"><a href="javascript:;">所有养老院</a></li>
+     <li><a href="{:U('AdminOrg/add')}"  target="_self">添加养老院</a></li>
+  </ul>
+  <form class="well form-search" method="post" action="{:u('AdminOrg/index')}">
+    <div class="search_type cc mb10">
+      <div class="mb10"> 
+        <span class="mr20">分类：
+        <select class="select_2" name="term">
+          	<option value='0' >全部</option>
+          	{$taxonomys}
+        </select>
+         &nbsp; &nbsp;养老院名称：
+        <input type="text" class="input length_2" name="org_name" style="width:200px;" value="{$keywords}" placeholder="请输入关键字...">
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+        </span>
+      </div>
+    </div>
+  </form>
+  <form class="J_ajaxForm" action="" method="post">
+    <div class="table_list">
+      <table width="100%" class="table table-hover table-bordered">
+        <thead>
+        	<tr>
+          		<td colspan="14">
+          			<label class="checkbox inline" for="check_all"><input type="checkbox" class="J_check_all" data-direction="y" data-checklist="J_check_y" id="check_all">全选</label>                
+			        <button class="btn btn-primary btn-small J_ajax_submit_btn" type="submit" data-action="{:u('AdminOrg/delete')}" data-subcheck="true" data-msg="你确定删除吗？">删除</button>
+          		</td>
+          	</tr>
+	          <tr>
+	            <th width="15"><label><input type="checkbox" class="J_check_all" data-direction="x" data-checklist="J_check_x"></label></th>
+               
+	            <th width="30">ID</th>
+	            <th width="170">机构名称</th>
+                <th width="50">床位数</th>
+                <th width="50">收费区间</th>
+                <th width="50">联系电话</th>
+                <th width="50">缩略图</th>
+	            <th width="80">发布人</th>
+	            <th width="70">发布时间</th>
+	            <th width="40">状态</th>
+	            <th width="80">操作</th>
+	          </tr>
+        </thead>
+        	<php>
+        		$status=array("1"=>"已审核","0"=>"未审核");
+        	</php>
+        	<foreach name="orgs" item="vo">
+	        	<tr>
+		            <td><input type="checkbox" class="J_check" data-yid="J_check_y" data-xid="J_check_x" name="ids[]" value="{$vo.org_id}" ></td>
+		            
+		            <td><a>{$vo.org_id}</a></td>
+    	            <td>
+		            	<a href="{:U('portal/article/index',array('id'=>$vo['org_id']))}" target="_blank">
+		            		<span>{$vo.org_name}</span>
+		            	</a>
+		            </td>
+		            <td>{$vo.org_bed_num}</td>
+                    <td>{$vo.charge_gt}--{$vo.charge_lt}(元)</td>
+                    <td>{$vo.org_tel}</td>
+    	            <td>
+    	            <php>$smeta=json_decode($vo['org_pic'],true);</php>
+    	            	<if condition="!empty($smeta['thumb'])"> 
+    	            		<a href="{:sp_get_asset_upload_path($smeta['thumb'])}" target='_blank'>查看</a>
+						        <else />
+                    <span>暂无缩略图</span>
+            </if>
+    	            </td>
+		            <td>{$vo.user_login}</td>
+		            <td>{$vo.create_time}</td>
+		            <td>{$status[$vo['org_status']]}</td>
+		            <td>
+
+		            	<!-- <a href="javascript:open_iframe_dialog('{:u('comment/commentadmin/index',array('post_id'=>$vo['id']))}','评论列表')">查看评论</a> -->
+		            	<a href="{:U('AdminOrg/edit',array('org_id'=>empty($vo['org_id'])?'':$vo['org_id']))}">修改</a>&nbsp;|
+		            	<a href="{:U('AdminOrg/delete',array('org_id'=>empty($vo['org_id'])?'':$vo['org_id']))}" class="J_ajax_del" >删除</a>
+					</td>
+	          	</tr>
+                  <php>$t++;</php>
+          </foreach>
+          	<tr>
+          		<td colspan="14">
+          			<label class="checkbox inline"><input type="checkbox" class="J_check_all" data-direction="y" data-checklist="J_check_y">全选</label>  
+			        <button class="btn btn-primary btn-small J_ajax_submit_btn" type="submit" data-action="{:u('AdminPost/delete')}" data-subcheck="true" data-msg="你确定删除吗？">删除</button>
+			        	</td>
+          	</tr>
+          </table>
+          <div class="pagination">{$Page}</div>
+     
+    </div>
+  </form>
+</div>
+<script src="__ROOT__/statics/js/common.js"></script>
+</body>
+</html>

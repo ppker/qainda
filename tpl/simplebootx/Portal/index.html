@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+		<title>{$site_seo_title} {$site_name}</title>
+		<meta name="keywords" content="{$site_seo_keywords}" />
+		<meta name="description" content="{$site_seo_description}">
+		<tc_include file="Public:head" />
+		<link href="__TMPL__Public/css/slippry/slippry.css" rel="stylesheet">
+		<style>
+			.caption-wraper{position: absolute;left:50%;bottom:2em;}
+			.caption-wraper .caption{
+			position: relative;left:-50%;
+			background-color: rgba(0, 0, 0, 0.54);
+			padding: 0.4em 1em;
+			color:#fff;
+			-webkit-border-radius: 1.2em;
+			-moz-border-radius: 1.2em;
+			-ms-border-radius: 1.2em;
+			-o-border-radius: 1.2em;
+			border-radius: 1.2em;
+			}
+			@media (max-width: 767px){
+				.sy-box{margin: 12px -20px 0 -20px;}
+				.caption-wraper{left:0;bottom: 0.4em;}
+				.caption-wraper .caption{
+				left: 0;
+				padding: 0.2em 0.4em;
+				font-size: 0.92em;
+				-webkit-border-radius: 0;
+				-moz-border-radius: 0;
+				-ms-border-radius: 0;
+				-o-border-radius: 0;
+				border-radius: 0;}
+			}
+			/*新增样式*/
+			.showlist{
+
+			}
+		</style>
+	</head>
+<body class="body-white">
+<tc_include file="Public:nav" />
+<php>
+$home_slides=sp_getslide("portal_index");
+
+$home_slides=empty($home_slides)?$default_home_slides:$home_slides;
+</php>
+<ul id="homeslider" class="unstyled">
+	<foreach name="home_slides" item="vo">
+	<li>
+		<div class="caption-wraper">
+			<div class="caption">{$vo.slide_name}</div>
+		</div>
+		<a href="{$vo.slide_url}"><img src="{:sp_get_asset_upload_path($vo['slide_pic'])}" alt="美图"></a>
+	</li>
+	</foreach>
+</ul>
+<div class="container">
+	<div class="showlist">
+		<div class="titbar">
+			<i class="fa fa-group"></i>
+			<h3>最新加入养老院</h3>
+		</div>
+		<div class="orgList">
+			<ul class="rest-items clearfix">
+				<volist name="orgList" id="data">
+					<php>
+						$org_pic=json_decode($data['org_pic'], true);
+						$ext=json_decode($data['ext'],true);
+					</php>
+	    			<li class="rest-item clearfix">
+	    				<a class="pic" href="{:leuu('List/show',array('id'=>$data['org_id']))}" target="_blank">
+	    					<if condition="empty($org_pic['thumb'])">
+	    						<img class="p-scale" src="__TMPL__Public/images/default_tupian1.png" width="180" height="160" alt="{$data.org_name}" />
+	    						<else />
+	    						<img class="p-scale" width="180" height="160" alt="{$data.org_name}" src="{:sp_get_asset_upload_path($org_pic['thumb'])}" style="width:180px;height:136px;" />
+	    					</if>
+	    				</a>
+	    				<div class="info">
+	    					<h4><img  alt="合作机构" src="__TMPL__Public/images/ico_gold.gif" title="合作机构">
+								<a href="{:U('List/show',array('id'=>$data['org_id']))}" title="{$data['org_name']}" target="_blank">{$data.org_name}</a>
+	    					</h4>
+	    					<ul>
+	    						<li>地址：
+									<empty name="ext.org_address">
+										{$data.canton_text}
+										<else />
+										{$ext.org_address}
+									</empty>
+	    						</li>
+	    						<li>床位数：
+	    							<empty name="data.org_bed_num">
+	    								暂无数据
+	    								<else />
+	    								{$data.org_bed_num}
+	    							</empty>&nbsp;张
+	    						</li>
+	    						<li>收费区间：
+									<empty name="data.charge_gt">
+	    								暂无数据
+	    								<else />
+	    								{$data.charge_gt}~{$data.charge_lt}
+	    							</empty>&nbsp;元
+	    						</li>
+	    						<li>联系电话：
+									<empty name="data.org_tel">
+	    								暂无数据
+	    								<else />
+	    								{$data.org_tel}
+	    							</empty>
+	    						</li>
+	    					</ul>
+	    				</div>
+	    			</li>
+				</volist>
+			</ul>
+		</div>
+		<!--新闻列表-->
+		<div class="new_list">
+			<div class="titbar">
+				<i class="fa fa-group"></i>
+				<h3>养老信息动态</h3>
+			</div>
+			<div class="tabpanels">
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#yl_new" aria-controls="yl_new" role="tab" data-toggle="tab">养老新闻</a></li>
+					<li role="presentation"><a href="#yl_zc" aria-controls="yl_zc" role="tab" data-toggle="tab">养老政策</a></li>
+				</ul>
+				<!--tab panels-->
+				<div class="tab-content">
+				    <div role="tabpanel" class="tab-pane active" id="yl_new">
+				    	<ul>
+				    		<php>
+				    			$lists=sp_sql_posts("cid:8;field:post_title,post_date,post_excerpt,tid,smeta;order:listorder asc;limit:5;");
+				    		</php>
+				    		<volist name="lists" id="vo">
+				    		<php>
+				    			$smeta=json_decode($vo['smeta'], true);
+				    		</php>
+							<li class="clearfix">
+								<a class="img-wraper" href="{:U('article/index',array('id'=>$vo['tid']))}">
+					            	<if condition="empty($smeta['thumb'])"> 
+										<img src="__TMPL__Public/images/default_tupian4.png" class="img-responsive" alt="{$vo.post_title}"/>
+									<else /> 
+										<img src="{:sp_get_asset_upload_path($smeta['thumb'])}" class="img-responsive img-thumbnail" alt="{$vo.post_title}" />
+									</if>
+					            </a>
+								<div class="pic-info">
+									<a href="{:leuu('article/index',array('id'=>$vo['tid']))}">{:msubstr($vo['post_excerpt'],0,48)}</a>
+								</div>
+								<div class="date">
+									<i class="fa fa-refresh"></i>&nbsp;时间：{:substr($vo['post_date'],0,10)}
+								</div>
+							</li>
+				    		</volist>
+				    	</ul>
+				    </div>
+				    <div role="tabpanel" class="tab-pane" id="yl_zc">
+				    	<ul>
+				    		<php>
+				    			$list_zc=sp_sql_posts("cid:9;field:post_title,post_date,post_excerpt,tid,smeta;order:listorder asc;limit:5;");
+				    		</php>
+				    		<volist name="list_zc" id="vo">
+				    		<php>
+				    			$smeta=json_decode($vo['smeta'], true);
+				    		</php>
+							<li class="clearfix">
+								<a class="img-wraper" href="{:U('article/index',array('id'=>$vo['tid']))}">
+					            	<if condition="empty($smeta['thumb'])"> 
+										<img src="__TMPL__Public/images/default_tupian4.png" class="img-responsive" alt="{$vo.post_title}"/>
+									<else /> 
+										<img src="{:sp_get_asset_upload_path($smeta['thumb'])}" class="img-responsive img-thumbnail" alt="{$vo.post_title}" />
+									</if>
+					            </a>
+								<div class="pic-info">
+									<a href="{:leuu('article/index',array('id'=>$vo['tid']))}">{:msubstr($vo['post_excerpt'],0,48)}</a>
+								</div>
+								<div class="date">
+									<i class="fa fa-refresh"></i>&nbsp;时间：{:substr($vo['post_date'],0,10)}
+								</div>
+							</li>
+				    		</volist>
+				    	</ul>
+				    </div>
+
+				</div>
+			</div>
+		</div>
+		<!--第二个列表-->
+		<div class="new_list">
+			<div class="titbar">
+				<i class="fa fa-group"></i>
+				<h3>老年健康动态</h3>
+			</div>
+			<div class="tabpanels">
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#ys_new" aria-controls="ys_new" role="tab" data-toggle="tab">养生健身</a></li>
+				</ul>
+				<!--tab panels-->
+				<div class="tab-content">
+				    <div role="tabpanel" class="tab-pane active" id="ys_new">
+				    	<ul>
+				    		<php>
+				    			$list_ys=sp_sql_posts("cid:10;field:post_title,post_date,post_excerpt,tid,smeta;order:listorder asc;limit:5;");
+				    		</php>
+				    		<volist name="list_ys" id="vo">
+				    		<php>
+				    			$smeta=json_decode($vo['smeta'], true);
+				    		</php>
+							<li class="clearfix">
+								<a class="img-wraper" href="{:U('article/index',array('id'=>$vo['tid']))}">
+					            	<if condition="empty($smeta['thumb'])"> 
+										<img src="__TMPL__Public/images/default_tupian4.png" class="img-responsive" alt="{$vo.post_title}"/>
+									<else /> 
+										<img src="{:sp_get_asset_upload_path($smeta['thumb'])}" class="img-responsive img-thumbnail" alt="{$vo.post_title}" />
+									</if>
+					            </a>
+								<div class="pic-info">
+									<a href="{:leuu('article/index',array('id'=>$vo['tid']))}">{:msubstr($vo['post_excerpt'],0,48)}</a>
+								</div>
+								<div class="date">
+									<i class="fa fa-refresh"></i>&nbsp;时间：{:substr($vo['post_date'],0,10)}
+								</div>
+							</li>
+				    		</volist>
+				    	</ul>
+				    </div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+<div class="container">
+	<tc_include file="Public:footer"/>
+</div>
+<tc_include file="Public:scripts"/>
+<script src="__TMPL__Public/js/slippry.min.js"></script>
+<script>
+$(function() {
+	var demo1 = $("#homeslider").slippry({
+		transition: 'fade',
+		useCSS: true,
+		captions: true,
+		speed: 1000,
+		pause: 3000,
+		auto: true,
+		preload: 'visible'
+	});
+});
+</script>
+{:hook('footer_end')}
+</body>
+</html>

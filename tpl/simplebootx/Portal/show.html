@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{$name} {$seo_title} {$site_name}</title>
+	<meta name="keywords" content="{$seo_keywords}" />
+	<meta name="description" content="{$seo_description}">
+    <tc_include file="Public:head" />
+</head>
+<body>
+<tc_include file="Public:nav" />
+<div class="container tc-main">
+    <div class="pathbar">
+    当前位置：
+    <a href="/">首页</a>
+    <i class="fa fa-arrow-right"></i>
+    <a href="{:U('list/find',array('id'=>7))}">养老院查询</a>
+    <i class="fa fa-arrow-right"></i>
+	{$orgInfo.org_name}
+    </div>
+    <php>
+    	$org_pic=json_decode($orgInfo['org_pic'], true);
+		$ext=json_decode($orgInfo['ext'],true);
+    </php>
+	<!--正文内容-->
+	<div class="layout clearfix">
+		<div class="org-main">
+			<div class="inst-info">
+				<div class="cont clearfix">
+					<div class="inst-pic">
+						<notempty name="org_pic['thumb']">
+							<img width="202" height="151" alt="{$orgInfo.org_name}" src="{:sp_get_asset_upload_path($org_pic['thumb'])}" />
+							<else />
+							<img width="202" height="151" alt="{$orgInfo.org_name}" src="__TMPL__Public/images/show.jpg" />
+						</notempty>
+						<span>照片</span>
+					</div>
+					<div class="inst-summary">
+						<h1>
+						<img alt="合作机构" src="__TMPL__Public/images/ico_gold.gif">{$orgInfo.org_name}</h1>
+						<ul>
+							<li>
+								<em>地址：</em>{$ext.org_address}
+							</li>
+							<li><em>床位：</em>{$orgInfo.org_bed_num}&nbsp;张</li>
+							<li><em>收费区间：</em>
+								<empty name="orgInfo.charge_gt">
+    								暂无数据
+    								<else />
+    								{$orgInfo.charge_gt}~{$orgInfo.charge_lt}
+    							</empty>&nbsp;元
+							</li>
+							<li><em>电话：</em>{$orgInfo.org_tel}</li>
+							<li class="tips">联系我时，请说是在养老网上看到的，谢谢！</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!--详情信息-->
+			<script type="text/javascript">
+				window.onscroll=function(){
+					var oDiv=document.getElementById("scroll-nav");
+					if(document.documentElement.scrollTop+document.body.scrollTop > 300){
+						oDiv.style.position="fixed";
+						oDiv.style.top="70px";
+					}else{
+						oDiv.style.position="static";
+					}
+				}
+			</script>
+			<div class="inst-detail">
+				<div id="scroll-nav" class="inst-menu" style="position: static;">
+					<ul>
+						<li><a class="row_1 current" href="#m1">基本信息</a></li>
+						<li><a class="row_2" href="#m2">联系我们</a></li>
+						<li><a class="row_3" href="#m3">机构介绍</a></li>
+						<li><a class="row_4" href="#m4">收费标准</a></li>
+						<li><a class="row_5" href="#m5">设施</a></li>
+						<li><a class="row_6" href="#m6">服务内容</a></li>
+						<li><a class="row_7" href="#m7">入住需知</a></li>
+						<li><a class="row_8" href="#m8">图片</a></li>
+					</ul>
+				</div>
+				<!--面板-->
+				<div class="panel">
+					<!--base-info-->
+					<div class="base-info">
+						<i id="row_1"></i>
+						<h4 class="title"><a name="m1">基本信息</a></h4>
+						<div class="cont">
+							<ul>
+								<li><em>所在地区：</em>{$orgInfo.canton_text}</li>
+								<li><em>机构类型：</em>{$s_org_type[$orgInfo['org_type']]}</li>
+								<li><em>机构性质：</em>{$s_org_property[$orgInfo['org_property']]}</li>
+								<li><em>占地面积：</em>{$ext.org_area}&nbsp;余亩</li>
+								<li><em>床位数：</em>{$orgInfo.org_bed_num}&nbsp;张</li>
+								<li><em>收住对象：</em>{$s_live_obj[$orgInfo['live_obj']]}</li>
+								<li><em>收费区间：</em>{$orgInfo.charge_gt}--{$orgInfo.charge_lt}&nbsp;元</li>
+								<li><em>特色服务：</em>{$ext.ts_service}</li>
+							</ul>
+						</div>
+					</div>
+					<!--contact-info-->
+					<div id="boxWrap" class="contact-info" name="m2">
+						<i id="row_2"></i>
+						<h4 class="title"><a name="m2">联系我们</a></h4>
+						<div class="cont">
+							<ul>
+								<li><em>联系人：</em>{$ext.contact_person}</li>
+								<li><em>地址：</em>{$ext.org_address}</li>
+								<li><em>邮编：</em>{$ext.org_zip_code}</li>
+								<li><em>网址：</em>{$ext.org_net}</li>
+								<li><em>邮箱：</em>{$ext.org_email}</li>
+								<li><em>交通：</em></li>
+								<li class="traffic">
+									<p> 丹阳市区——A\丹阳-延陵专线（红叶颐馨园站下）B\丹阳-云林（红叶颐馨园站下）</p>
+									<p> 外地驾车路线：312国道(麦溪出口下)南与丹延路交叉口红叶颐馨园</p>
+									{$ext.org_trafic}
+								</li>
+							</ul>	
+						</div>
+					</div>
+					<!--机构介绍-->
+					<div class="inst-intro">
+						<i id="row_3"></i>
+						<h4 class="title"><a name="m3">机构介绍</a></h4>
+						<div class="cont">
+							{$orgInfo.org_intro}
+						</div>
+					</div>
+					<!--机构收费-->
+					<div class="inst-charge">
+						<i id="row_4"></i>
+						<h4 class="title"><a name="m4">收费标准</a></h4>
+						<div class="cont">
+							<empty name="orgInfo.charge_gt">
+								暂无详细介绍，具体详情请致电咨询！
+								<else />
+								{$orgInfo.charge_gt}--{$orgInfo.charge_lt}
+							</empty>&nbsp;元	
+						</div>
+					</div>
+					<!--机构设施facilities-->
+					<div class="facilities">
+						<i id="row_5"></i>
+						<h4 class="title"><a name="m5">设施</a></h4>
+						<div class="cont">
+							{$ext.org_facility}
+						</div>
+					</div>
+					<!--服务内容-->
+					<div class="service-content">
+						<i id="row_6"></i>
+						<h4 class="title"><a name="m6">服务内容</a></h4>
+						<div class="cont">
+							{$ext.content_service}
+						</div>
+					</div>
+					<!--入住须知-->
+					<div class="inst-notes">
+						<i id="row_7"></i>
+						<h4 class="title"><a name="m7">入住须知</a></h4>
+						<div class="cont">
+							{$ext.org_notice}
+						</div>
+					</div>
+					<!--机构图片-->
+					<div class="inst-photos">
+						<i id="row_8"></i>
+						<h4 class="title"><a name="m8">图片</a></h4>
+						<div class="cont">
+							<ul>
+								<volist name="org_pic.photo" id="data">
+									<li>
+										<img width="138" height="92" alt="{$orgInfo['org_name']}" src="{:sp_get_asset_upload_path($data['url'])}">
+									</li>
+								</volist>
+					
+
+								<li>
+									<img width="138" height="92" alt="江苏丹阳市红叶颐馨园图片" src="__TMPL__Public/images/show1.jpg">
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--右边的部分-->
+		<div class="p-right">
+			 <div class="titbar">
+			 <i class="fa fa-paw"></i>&nbsp;<h3>最新加入养老院</h3>
+			 </div>
+			 <div class='cont'>
+			 	<ul class="txtlist clearfix">
+			 		<volist name="newList" id="data">
+			 			<li>
+			 				<i class="fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;<a href="{:leuu('List/show',array('id'=>$data['org_id']))}" target="_blank" title="{$data['org_name']}">{$data.org_name}</a>
+			 				<span class="p_date">
+			 					<i class='fa fa fa-gear'>&nbsp;&nbsp;&nbsp;</i>时间：{:substr($data['create_time'],0,10)}
+			 				</span>
+			 			</li>
+			 		</volist>
+			 	</ul>	
+			 </div>
+		</div>	
+	</div>
+    <tc_include file="Public:footer" />
+</div>
+	<!-- JavaScript -->
+	<tc_include file="Public:scripts" />
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var $scroll_nav_top = $('#scroll-nav').offset();
+		var offset=130;
+		var row_1=0,row_2=0,row_3=0,row_4=0,row_5=0,row_6=0,row_7=0,row_8=0,row_9=0;
+		function scrollLocation () {
+		         row_1 = $('#row_1').offset()?$('#row_1').offset().top-offset:0;
+		         row_2 = $('#row_2').offset()?$('#row_2').offset().top-offset:0;
+		         row_3 = $('#row_3').offset()?$('#row_3').offset().top-offset:0;
+		         row_4 = $('#row_4').offset()?$('#row_4').offset().top-offset:0;
+		         row_5 = $('#row_5').offset()?$('#row_5').offset().top-offset:0;
+		         row_6 = $('#row_6').offset()?$('#row_6').offset().top-offset:0;
+		         row_7 = $('#row_7').offset()?$('#row_7').offset().top-offset:0;
+		         row_8 = $('#row_8').offset()?$('#row_8').offset().top-offset:0;
+		         row_9 = $('#row_9').offset()?$('#row_9').offset().top-offset:0;
+		}
+		scrollLocation ();
+		//滚动
+		$(window).scroll(function(){
+			var $scrollTop = $(this).scrollTop();
+			if(row_8>0 && $scrollTop >= row_8) {
+                $('.inst-menu a').removeClass('current');
+                $('.row_8').addClass('current');
+            }else  if(row_7>0 && $scrollTop >= row_7) {
+                $('.inst-menu a').removeClass('current');
+                $('.row_7').addClass('current');
+            }else  if(row_6>0 && $scrollTop >= row_6) {
+                $('.inst-menu a').removeClass('current');
+                $('.row_6').addClass('current');
+            }else  if(row_5>0 && $scrollTop >= row_5) {
+                $('.inst-menu a').removeClass('current');
+                $('.row_5').addClass('current');
+            }else  if(row_4>0 && $scrollTop >= row_4) {
+                $('.inst-menu a').removeClass('current');
+                $('.row_4').addClass('current');
+            }else  if(row_3>0 && $scrollTop >= row_3) {
+                $('.inst-menu a').removeClass('current');
+                $('.row_3').addClass('current');
+            }else  if(row_2>0 && $scrollTop >= row_2) {
+                $('.inst-menu a').removeClass('current');
+                $('.row_2').addClass('current');
+            }else  if(row_1>0 && $scrollTop >= row_1) {
+                $('.inst-menu a').removeClass('current');
+                $('.row_1').addClass('current');
+            }
+		});
+		//点击事件
+		$('.inst-menu a').on("click",function(e){
+			e.preventDefault();
+			var iid='#'+$(this).attr("class");
+			var $li=$(iid);
+			if($li.length){
+				//alert($li.offset().top);
+				$('html,body').animate({scrollTop:$li.offset().top-93},0);
+			}
+		});
+		
+	});
+	</script>
+</body>
+</html>

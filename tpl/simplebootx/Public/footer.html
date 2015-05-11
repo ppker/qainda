@@ -1,0 +1,32 @@
+<br>
+<style type="text/css">
+  .links a{
+    margin:0 10px;    
+  }
+  .links{
+    background-color: #ccc;
+    padding:10px 0;
+    margin-bottom: 10px;
+  }
+  #footer{
+
+  }
+</style>
+<!-- Footer
+      ================================================== -->
+      <hr>
+{:hook('footer')}
+      <div id="footer">
+        <div class="links">
+        <php>$links=sp_getlinks();</php>
+        <foreach name="links" item="vo">
+          <a href="{$vo.link_url}" target="{$vo.link_target}">{$vo.link_name}</a>
+        </foreach>
+        </div>
+        <p style="text-align:center;background-color:#abcdef;padding:20px 0 20px;">
+        Copyright © 2015 - 2015 养老机构网 All Rights |豫ICP备14028477号 | Reserved by ppker
+
+        </p>
+      </div>
+      <div id="backtotop"><i class="fa fa-arrow-circle-up"></i></div>
+      {$site_tongji}

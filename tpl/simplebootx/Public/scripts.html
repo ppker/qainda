@@ -1,0 +1,147 @@
+<script type="text/javascript">
+//全局变量
+var GV = {
+    DIMAUB: "__ROOT__/",
+    JS_ROOT: "statics/js/",
+    TOKEN: ""
+};
+</script>
+<!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="__ROOT__/statics/js/jquery.js"></script>
+    <script src="__ROOT__/statics/js/wind.js"></script>
+    <script src="__TMPL__Public/simpleboot/bootstrap/js/bootstrap.min.js"></script>
+    <script src="__ROOT__/statics/js/frontend.js"></script>
+	<script>
+	$(function(){
+		$('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
+		
+		$("#main-menu li.dropdown").hover(function(){
+			$(this).addClass("open");
+		},function(){
+			$(this).removeClass("open");
+		});
+		
+		$.post("{:U('user/index/is_login')}",{},function(data){
+			if(data.status==1){
+				if(data.user.avatar){
+					$("#main-menu-user .headicon").attr("src",data.user.avatar.indexOf("http")==0?data.user.avatar:"__UPLOAD__avatar/"+data.user.avatar);
+				}
+				
+				$("#main-menu-user .user-nicename").text(data.user.user_nicename!=""?data.user.user_nicename:data.user.user_login);
+				$("#main-menu-user li.user.login").show();
+				
+			}
+			if(data.status==0){
+				$("#main-menu-user li.user.offline").show();
+			}
+			
+		});	
+		;(function($){
+			$.fn.totop=function(opt){
+				var scrolling=false;
+				return this.each(function(){
+					var $this=$(this);
+					$(window).scroll(function(){
+						if(!scrolling){
+							var sd=$(window).scrollTop();
+							if(sd>100){
+								$this.fadeIn();
+							}else{
+								$this.fadeOut();
+							}
+						}
+					});
+					
+					$this.click(function(){
+						scrolling=true;
+						$('html, body').animate({
+							scrollTop : 0
+						}, 500,function(){
+							scrolling=false;
+							$this.fadeOut();
+						});
+					});
+				});
+			};
+		})(jQuery); 
+		
+		$("#backtotop").totop();
+		
+		//个性化标签提示
+	    /*$("a").each(function(b) {//这里是控制标签
+	        if (this.title) {
+	            var c = this.title; //把title的赋给自定义属性 myTilte ，屏蔽自带提示
+	            var a = 30; //设置提示框相对于偏移位置，防止遮挡鼠标
+	            $(this).mouseover(function(d){   //鼠标移上事件
+	                this.title = "";
+	                $("body").append("<div id='tooltip'>" + c + "</div>"); //创建提示框,添加到页面中
+	                $("#tooltip").css({
+	                    left: (d.pageX + a) + "px",
+	                    top: d.pageY + "px",
+	                    opacity: "0.8"
+	                }).show(250); //设置提示框的坐标，并显示
+	            }).mouseout(function() { //鼠标移出事件
+	                this.title = c; //重新设置title
+	                $("#tooltip").remove() //移除弹出框
+	            }).mousemove(function(d) { //跟随鼠标移动事件
+	                $("#tooltip").css({
+	                    left: (d.pageX + a) + "px",
+	                    top: d.pageY + "px"
+	                })
+	            })
+	        }
+	    });*/
+	    $("a").each(function(b){
+	    	if(this.title){
+	    		var c=this.title;
+	    		var a=30;
+	    		$(this).mouseover(function(d){
+	    			this.title="";
+	    			$("body").append("<div id='tooltip'>"+c+"</div>");
+	    			$("#tooltip").css({
+	    				left:(d.pageX+a)+"px",
+	    				top:d.pageY+"px",
+	    				opacity:"0.8"
+	    			}).show(250);
+	    		}).mouseout(function(){
+	    			this.title=c;
+	    			$("#tooltip").remove();
+	    		}).mousemove(function(d){
+	    			$("#tooltip").css({
+	    				left:(d.pageX+a)+"px",
+	    				top:d.pageY+"px"
+	    			});
+	    		});
+	    	}
+	    });	
+/*--------------------------*/
+		/*导航选中效果*/
+		<php>
+		if(!$cat_id) $cat_id=0;
+		</php>
+		var p_sel={$cat_id}?{$cat_id}:0;
+		//alert('ssss');
+		if(p_sel==7){
+			$("#main-menu .nav li").removeClass("current");
+			$("#menu-item-4").addClass("current");
+		}else if(p_sel==8){
+			$("#main-menu .nav li").removeClass("current");
+			$("#menu-item-5").addClass("current");
+		}else if(p_sel==9){
+			$("#main-menu .nav li").removeClass("current");
+			$("#menu-item-6").addClass("current");	
+		}else if(p_sel==10){
+			$("#main-menu .nav li").removeClass("current");
+			$("#menu-item-7").addClass("current");
+		}else if(p_sel==1){
+			$("#main-menu .nav li").removeClass("current");
+			$("#menu-item-9").addClass("current");
+		}else{
+			$("#main-menu .nav li").removeClass("current");
+			$("#menu-item-10").addClass("current");
+		}
+	});
+	</script>
+

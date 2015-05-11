@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{$name} {$seo_title} {$site_name}</title>
+	<meta name="keywords" content="{$seo_keywords}" />
+	<meta name="description" content="{$seo_description}">
+    <tc_include file="Public:head" />
+    <style type="text/css">
+		.select {
+			border: #000 1px solid;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			-o-border-radius: 10px;
+			-ms-border-radius: 10px;
+			border-radius: 10px;
+			width: 100%;
+			margin: 5px auto;
+			font-size: 12px
+		}
+		.select li {
+			list-style: none;
+			padding: 8px 0 3px 100px;
+		}
+		.select .select-list {
+			border-bottom: #000 1px dashed;
+		}
+		.select dl {
+			zoom: 1;
+			position: relative;
+			line-height: 24px;
+			margin-bottom: 2px;
+		}
+		.select dl:after {
+			content: " ";
+			display: block;
+			clear: both;
+			height: 0;
+			overflow: hidden
+		}
+		.select dt {
+			width: 100px;
+			margin-bottom: 5px;
+			position: absolute;
+			top: 0;
+			left: -100px;
+			text-align: right;
+			color: #666;
+			height: 24px;
+			line-height: 24px
+		}
+		.select dd {
+			float: left;
+			display: inline;
+			margin: 0 0 5px 5px;
+		}
+		.select a {
+			display: inline-block;
+			white-space: nowrap;
+			height: 24px;
+			padding: 0 10px;
+			text-decoration: none;
+			color: #039;
+			border-radius: 2px;
+		}
+		.select a:hover {
+			color: #f60;
+			background-color: #f3edc2
+		}
+		.select .selected a {
+			color: #fff;
+			background-color: #f60
+		}
+		.select-result dt {
+			font-weight: bold
+		}
+		.select-no {
+			color: #999
+		}
+		.select .select-result a {
+			padding-right: 20px;
+			background: #f60 url("__TMPL__Public/images/close.gif") right 9px no-repeat
+		}
+		.select .select-result a:hover {
+			background-position: right -15px
+		}
+
+	    .pagination ul span {
+	    color: #222;
+	   
+	    line-height: 20px;
+	    padding: 4px 12px;
+	    text-decoration: none;
+		}
+
+		.pagination ul span {
+		    background-color: #ccc;
+		}
+		.pagination ul span:hover {
+		    background-color: #222;
+		    color:#fff;
+		    text-decoration: none;
+		}
+		.pagination ul a {
+		    background-color: #ccc;
+		    padding:4px 12px;
+		}
+		.pagination ul a:hover {
+		    background-color: #222;
+		    color:#fff;
+		    text-decoration: none;
+		}
+    </style>
+</head>
+<body>
+<tc_include file="Public:nav" />
+<div class="container tc-main">
+	
+    <div class="pathbar">
+    当前位置：
+    <a href="/">首页</a>
+    <i class="fa fa-arrow-right"></i>
+    养老院查询
+    </div>
+    <!--选择条件框-->
+    <div class="col-md-12">
+    	<ul class="select">
+    		<li class="select-list">
+    			<dl id="select1">
+    				<dt>行政区域:</dt>
+    				<!-- <dd class="select-all selected"><a href="{:U('List/find?id=0_0_0_0_0_0_0_0')}">不限</a></dd> -->
+    				<volist name="province" id="data">
+    					{$data}
+    				</volist>
+    				
+    			</dl>
+    		</li>
+    		<li class="select-list">
+    			<dl id="select2">
+    				<dt>地市选择:</dt>
+    				<volist name="orgCity" id="data">
+    					{$data}
+    				</volist>
+
+    			</dl>
+    		</li>
+    		<li class="select-list">
+				<dl id="select3">
+					<dt>区县选择:</dt>
+					<volist name="orgArea" id="data">
+    					{$data}
+    				</volist>
+				</dl>
+			</li>
+			<li class="select-list">
+				<dl id="select4">
+					<dt>机构性质:</dt>
+					<volist name="org_type" id="data">
+						{$data}
+					</volist>
+				</dl>
+			</li>
+			<li class="select-list">
+				<dl id="select5">
+					<dt>价格区间:</dt>
+					<volist name="org_price" id="data">
+						{$data}
+					</volist>
+				</dl>
+			</li>
+			<li class="select-list">
+				<dl id="select6">
+					<dt>床位数:</dt>
+					<volist name="org_bed_num" id="data">
+						{$data}
+					</volist>
+				</dl>
+			</li>
+			<li class="select-list">
+				<dl id="select7">
+					<dt>收住对象:</dt>
+					<volist name="live_obj" id="data">
+						{$data}
+					</volist>
+				</dl>
+			</li>
+			<li class="select-result">
+				<dl>
+					<dt>已选条件：</dt>
+					<empty name="condition">
+						<dd class="select-no">暂时没有选择条件</dd>
+						<else />
+						<volist name="condition" id="data">
+							{$data}
+						</volist>
+					</empty>
+					
+				</dl>
+			</li>
+    	</ul>
+    </div>
+    <div class="clearfix" style="margin-top:15px;">
+	    <div class="col-md-9 restlist">
+	    	<div class="titbar">
+	    		<i class="fa fa-group"></i>&nbsp;<h3>全国养老院列表</h3>
+	    	</div>
+	    	<div class="orgList">
+	    		<ul class="rest-items">
+	    			<volist name="orgList" id="data">
+	    			<php>
+						$org_pic=json_decode($data['org_pic'], true);
+						$ext=json_decode($data['ext'],true);
+					</php>
+		    			<li class="rest-item clearfix">
+		    				<a class="pic" href="{:leuu('List/show',array('id'=>$data['org_id']))}" target="_blank">
+		    					<if condition="empty($org_pic['thumb'])">
+		    						<img class="p-scale" src="__TMPL__Public/images/default_tupian1.png" width="180" height="160" alt="{$data.org_name}" />
+		    						<else />
+		    						<img class="p-scale" width="180" height="160" alt="{$data.org_name}" src="{:sp_get_asset_upload_path($org_pic['thumb'])}" style="width:180px;height:136px;" />
+		    					</if>
+		    				</a>
+		    				<div class="info">
+		    					<h4><img  alt="合作机构" src="__TMPL__Public/images/ico_gold.gif" title="合作机构">
+									<a href="{:U('List/show',array('id'=>$data['org_id']))}" title="{$data['org_name']}" target="_blank">{$data.org_name}</a>
+		    					</h4>
+		    					<ul>
+		    						<li>地址：
+										<empty name="ext.org_address">
+											{$data.canton_text}
+											<else />
+											{$ext.org_address}
+										</empty>
+		    						</li>
+		    						<li>床位数：
+		    							<empty name="data.org_bed_num">
+		    								暂无数据
+		    								<else />
+		    								{$data.org_bed_num}
+		    							</empty>&nbsp;张
+		    						</li>
+		    						<li>收费区间：
+										<empty name="data.charge_gt">
+		    								暂无数据
+		    								<else />
+		    								{$data.charge_gt}~{$data.charge_lt}
+		    							</empty>&nbsp;元
+		    						</li>
+		    						<li>联系电话：
+										<empty name="data.org_tel">
+		    								暂无数据
+		    								<else />
+		    								{$data.org_tel}
+		    							</empty>
+		    						</li>
+		    					</ul>
+		    				</div>
+		    			</li>
+	    			</volist>
+	    		</ul>
+	    	</div>
+			
+	    </div>
+	    <!--右边的部分-->
+	    <div class="p-right">
+	    	 <div class="titbar">
+	    	 <i class="fa fa-paw"></i>&nbsp;<h3>最新加入养老院</h3>
+	    	 </div>
+	    	 <div class='cont'>
+	    	 	<ul class="txtlist clearfix">
+	    	 		<volist name="newList" id="data">
+	    	 			<li>
+	    	 				<i class="fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;<a href="{:leuu('List/show',array('id'=>$data['org_id']))}" target="_blank" title="{$data['org_name']}">{$data.org_name}</a>
+	    	 				<span class="p_date">
+	    	 					<i class='fa fa fa-gear'>&nbsp;&nbsp;&nbsp;</i>时间：{:substr($data['create_time'],0,10)}
+	    	 				</span>
+	    	 			</li>
+	    	 		</volist>
+	    	 	</ul>	
+	    	 </div>
+	    </div>
+	</div>
+		<div class="pagination">
+			<ul>
+				{$page}
+			</ul>
+		</div>
+    <tc_include file="Public:footer" />
+</div>
+	
+    
+	<!-- JavaScript -->
+	<tc_include file="Public:scripts" />
+	<script src="__ROOT__/statics/js/selectselect.js"></script>
+</body>
+</html>
